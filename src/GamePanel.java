@@ -1,7 +1,11 @@
 package main;
 
+import Entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Color;
+
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -10,7 +14,7 @@ public class GamePanel extends JPanel implements Runnable{
     //scales 16*16 by three so it is legible
     final int scale = 3;
 
-    final int TileSize = originalTileSize * scale; // 48*48 size tile
+    public final int TileSize = originalTileSize * scale; // 48*48 size tile
 
     //4*3 aspect ratio!
     final int maxScreenCol = 16; //16 columns of tiles
@@ -23,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
     //starts the game's clock
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+    Player player = new Player(this,keyH);
 
     //DEFAULT PLAYER POSITION
 
@@ -86,28 +91,15 @@ public class GamePanel extends JPanel implements Runnable{
 
     }
     public void update(){
-
-        if(keyH.upPressed == true) {
-            playerY -= playerSpeed;
-        }
-        else if(keyH.downPressed == true){
-            playerY += playerSpeed;
-        }
-        else if(keyH.leftPressed == true){
-            playerX -= playerSpeed;
-        }
-        else if (keyH.rightPressed == true){
-            playerX += playerSpeed;
-        }
+        player.update();
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        Graphics2D g2 = (Graphics2D) g;
+        Graphics2D g2 = (Graphics2D)g;
 
-        g2.setColor(Color.white);
+        player.draw(g2);
 
-        g2.fillRect(playerX, playerY, TileSize, TileSize);
         g2.dispose();
     }
 }
